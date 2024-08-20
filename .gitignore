@@ -1,2 +1,4 @@
-Server/config/config.json
-Server/config/metadata.json
+/Server/config/config.json
+/Server/config/metadata.json
+/node_modules
+.env

@@ -1,3 +1,5 @@
+const path = require("node:path")
+
 const config = require("./config/metadata.json");
 const serverPort = config.server_port;
 
@@ -9,14 +11,11 @@ const app = express();
 const db = require("./models");
 
 // routers
-const usersRouter = require("./routes/Users");
-const linesRouter = require("./routes/Lines");
-app.use("/lines", linesRouter);
-app.use("/users", usersRouter);
-
 const routeMaker = require("./scripts/routeMaker");
-routeMaker.makeRoutes("./routes");
-
+const routes = routeMaker.makeRoutes(path.resolve("./routes"));
+for (const [key, val] of Object.entries(routes)) {
+    app.use(val.at(0), val.at(1));
+}
 
 db.sequelize.sync().then(() => {
     app.listen(serverPort, () => {
